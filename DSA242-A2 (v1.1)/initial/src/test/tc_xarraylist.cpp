@@ -1,3 +1,5 @@
+#include "test/tc_xarraylist.h"
+
 #include <iostream>
 #include <iomanip>
 #include "list/XArrayList.h"

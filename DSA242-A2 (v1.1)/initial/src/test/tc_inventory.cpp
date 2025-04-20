@@ -1,3 +1,4 @@
+#include "test/tc_inventory.h"
 #include <iostream>
 #include "app/inventory.h" 
 
