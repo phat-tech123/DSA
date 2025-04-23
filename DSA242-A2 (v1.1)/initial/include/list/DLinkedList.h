@@ -100,7 +100,7 @@ public:
             std::cout << item; //print the item
      }
      */
-    Iterator begin()
+    Iterator begin ()
     {
         return Iterator(this, true);
     }
@@ -109,6 +109,16 @@ public:
         return Iterator(this, false);
     }
 
+    ////////////////////// Student begin ////////////////////////////
+	Iterator begin() const {
+	    return Iterator(const_cast<DLinkedList<T>*>(this), true);
+	}
+
+	Iterator end() const {
+	    return Iterator(const_cast<DLinkedList<T>*>(this), false);
+	}
+    ////////////////////// Student end /////////////////////////////
+    
     /* last, beforeFirst and BWDIterator helps user to traverse a list backwardly
      * Example: assume "list" is object of DLinkedList
 
@@ -243,10 +253,10 @@ public:
     public:
         BWDIterator(DLinkedList<T> *pList = 0, bool last = true)
         {
-            if (last)
+ if (last)
             {
                 if (pList != 0)
-                    this->pNode = pList->tail->prev;
+   this->pNode = pList->tail->prev;
                 else
                     pNode = 0;
             }

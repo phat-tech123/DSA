@@ -531,11 +531,16 @@ InventoryManager InventoryManager::merge(const InventoryManager &inv1,
     	return invMerge;
 }
 
+int myCeil(double x) {
+    int xi = (int)x;
+    return (x == (double)xi) ? xi : xi + ((x > 0) ? 1 : 0);
+}
+
 void InventoryManager::split(InventoryManager &section1,
                              InventoryManager &section2,
                              double ratio) const
 {
-	int num = ceil(ratio * double(this->size()));
+	int num = myCeil(ratio * double(this->size()));
 	for(int i = 0; i < num; i++){
 		section1.addProduct(this->getProductAttributes(i), this->getProductName(i), this->getProductQuantity(i));
 	}
