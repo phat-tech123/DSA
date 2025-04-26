@@ -4,6 +4,8 @@
 #include "heap/IHeap.h"
 #include <sstream>
 #include <iostream>
+
+#include <list/XArrayList.h>
 using namespace std;
 /*
  * function pointer: int (*comparator)(T& lhs, T& rhs)

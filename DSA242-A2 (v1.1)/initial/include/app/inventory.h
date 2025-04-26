@@ -214,8 +214,8 @@ string List1D<T>::toString() const
 	return pList->toString();
 }
 
-template <typename T>
-ostream &operator<<(ostream &os, const List1D<T> &list)
+template <typename U>
+ostream &operator<<(ostream &os, const List1D<U> &list)
 {
 	os << "[";
 	for (int i = 0; i < list.size(); i++)
@@ -358,8 +358,8 @@ string List2D<T>::toString() const
 	return ss.str();
 }
 
-template <typename T>
-ostream &operator<<(ostream &os, const List2D<T> &matrix)
+template <typename U> 
+ostream &operator<<(ostream &os, const List2D<U> &matrix)
 {
 	os << "[";
 	for(int i = 0; i < matrix.rows(); i++){
