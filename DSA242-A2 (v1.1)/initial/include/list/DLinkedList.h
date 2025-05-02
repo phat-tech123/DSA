@@ -599,10 +599,12 @@ string DLinkedList<T>::toString(string (*item2str)(T &))
 	for(int i = 0; i < this->count; i++){
 		tmp = tmp->next;
 
-		if(item2str)
+		if(item2str){
 			ss << item2str(tmp->data);
-		else
+		}
+		else{
 			ss << tmp->data;
+		}
 
 		if(tmp->next->next) ss << ", ";
 

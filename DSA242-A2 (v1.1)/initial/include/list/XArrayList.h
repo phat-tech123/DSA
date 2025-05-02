@@ -9,6 +9,7 @@
 #include <sstream>
 #include <iostream>
 #include <type_traits>
+
 using namespace std;
 
 template <class T>
@@ -52,7 +53,7 @@ public:
     
     // Method by Student: BEGIN
     void set(int index, T item);
-    // Method by Student: END
+    //Method by Student: END
 
 
     void println(string (*item2str)(T &) = 0)
@@ -408,17 +409,20 @@ string XArrayList<T>::toString(string (*item2str)(T &))
      * @param item2str A function pointer for converting items of type T to strings. If null, default to the string conversion of T.
      * @return A string representation of the array list with elements separated by commas and enclosed in square brackets.
      */
-
-	stringstream ss;
+	ostringstream ss;
 	ss << "[";
-	for (int i = 0; i < this->count; i++) {
-		if (item2str){
-			ss << item2str(this->data[i]);
-		} else{
-			ss << this->data[i];
+	for (int i = 0; i < count; i++) {
+	    if (item2str) {
+		ss << item2str(data[i]);
+	    } else {
+		if constexpr (std::is_same_v<T, std::pair<char, int>>) {
+		    ss << "(" << data[i].first << "," << data[i].second << ")";
+		} else {
+		    ss << data[i];
 		}
-		
-		if (i < this->count - 1) ss << ", ";
+	    }
+	    
+	    if (i < count - 1) ss << ", ";
 	}
 	ss << "]";
 	return ss.str();

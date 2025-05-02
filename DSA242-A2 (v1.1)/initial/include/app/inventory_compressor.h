@@ -12,6 +12,7 @@
 #include "heap/Heap.h"
 #include "list/XArrayList.h"
 
+
 template<int treeOrder>
 class HuffmanTree {
 public:
@@ -21,7 +22,7 @@ public:
         XArrayList<HuffmanNode*> children;
 
         HuffmanNode(char s, int f); //Leaf node
-        HuffmanNode(int f, const  XArrayList<HuffmanNode*>& childs); //Internal node
+        HuffmanNode(int f, const XArrayList<HuffmanNode*>& childs); //Internal node
     };
 
     HuffmanTree();
@@ -55,7 +56,6 @@ private:
 
 
 #endif // INVENTORY_COMPRESSOR_H
-
 template <int treeOrder>
 HuffmanTree<treeOrder>::HuffmanTree()
 {
@@ -71,19 +71,74 @@ template <int treeOrder>
 void HuffmanTree<treeOrder>::build(XArrayList<pair<char, int>>& symbolsFreqs)
 {
     //TODO
+	Heap<HuffmanNode*> huffmanNodeHeap;
+	for(int i = 0; i < symbolsFreqs.size(); i++){
+		pair<char, int> p = symbolsFreqs.get(i);
+		huffmanNodeHeap.push(new HuffmanNode(p.first, p.second));
+	}
+    	int L =  huffmanNodeHeap.size();
+	int n = treeOrder;
+	int cond = (L - 1) % (n - 1); 
+	int d = (cond != 0) ? (n - 1) - cond : 0;
+	for(int i = 0; i < d; i++){
+		huffmanNodeHeap.push(new HuffmanNode('\0', 0));
+	}
+
+	while(huffmanNodeHeap.size() > 1){
+		XArrayList<HuffmanNode*> childList;
+		int fre = 0;
+		for(int i = 0; i < treeOrder; i++){
+			HuffmanNode* child = huffmanNodeHeap.pop();
+			fre += child->freq;
+			childList.add(child);
+		}
+		huffmanNodeHeap.push(new HuffmanNode(fre, childList));
+	}
+
+	this->root = huffmanNodeHeap.pop();
 }
 
 template <int treeOrder>
 void HuffmanTree<treeOrder>::generateCodes(xMap<char, std::string> &table)
 {
     //TODO
+    	XArrayList<pair<HuffmanNode*, std::string>> stack;	
+	stack.add({this->root, ""});
+	while(!stack.empty()){
+		pair<HuffmanNode*, string> curr = stack.removeAt(stack.size()-1);
+
+		if(curr.first->children.empty()){ //leaf node
+			if(curr.first->symbol != '\0'){
+				table.put(curr.first->symbol, curr.second);
+			}
+		} else{ //internal node
+			for(int i = 0; i <curr.first->children.size(); i++){
+				string code = curr.second + to_string(i);
+				stack.add({curr.first->children.get(i), code});
+			}
+		}
+	}
 }
 
 template <int treeOrder>
 std::string HuffmanTree<treeOrder>::decode(const std::string &huffmanCode)
 {
     //TODO
-    return std::string();
+	std::string decodeStr = "";
+	HuffmanNode* curr = this->root;
+
+	for(char bit : huffmanCode){
+		int index = bit - '0';
+
+	 	curr = curr->children.get(index);
+		if(curr->children.empty()){ //leaf node
+			if(curr->symbol != '\0'){
+				decodeStr += curr->symbol;
+			}
+			curr = this->root;
+		}
+	}
+    return decodeStr;
 }
 
 template <int treeOrder>
@@ -102,6 +157,7 @@ template <int treeOrder>
 void InventoryCompressor<treeOrder>::buildHuffman()
 {
     //TODO
+    	
 }
 
 template <int treeOrder>
@@ -116,7 +172,17 @@ template <int treeOrder>
 std::string InventoryCompressor<treeOrder>::productToString(const List1D<InventoryAttribute> &attributes, const std::string &name)
 {
     //TODO
-    return std::string();
+    	stringstream ss;
+	ss << name << ":";
+	for(int i = 0; i < attributes.size(); i++){
+		if(i > 0) ss << ",";
+
+		ss << "(";
+		ss << attributes.get(i).name << ":" << attributes.get(i).value;
+		ss << ")";
+	}
+
+    return ss.str();
 }
 
 template <int treeOrder>
