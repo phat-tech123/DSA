@@ -5,6 +5,35 @@
  #include "util/Point.h"
  #include "util/sampleFunc.h"
  
+	/*
+	XArrayList<HuffmanNode*> huffmanNodeList;
+	for(int i = 0; i < symbolsFreqs.size(); i++){
+		pair<char, int> p = symbolsFreqs.get(i);
+		huffmanNodeList.add(new HuffmanNode(p.first, p.second));
+	}
+    	int L =  huffmanNodeList.size();
+	int n = treeOrder;
+	int cond = (L - 1) % (n - 1);  
+	int d = (cond != 0) ? (n - 1) - cond : 0;
+	for(int i = 0; i < d; i++){
+		huffmanNodeList.add(new HuffmanNode('\0', 0));
+	}
+	while(huffmanNodeList.size() > 1){
+		mergeSort(huffmanNodeList, 0, huffmanNodeList.size()-1);
+		XArrayList<HuffmanNode*> childList;
+		int fre = 0;
+		for(int i = 0; i < treeOrder; i++){
+			HuffmanNode* child = huffmanNodeList.removeAt(0);
+			fre += child->freq;
+			childList.add(child);
+		}
+		huffmanNodeList.add(new HuffmanNode(fre, childList));
+	}
+	this->root = huffmanNodeList.removeAt(0);
+	*/
+
+
+
  int myIntComparator(int& lhs, int& rhs){
      if(lhs < rhs) return +1;
      else if(lhs > rhs) return -1;
@@ -120,6 +149,23 @@
      }
      cout << endl;
  }
+
+void heapDemo4(){
+    XArrayList<int> list;
+    int values[] = {3, 1, 4, 1, 5, 9, 2, 6, 5};
+    for (int v : values) {
+        list.add(v);
+    }
+
+    cout << "Before heapsort: ";
+    list.println();
+
+    Heap<int> heap;
+    heap.heapsort(list);
+
+    cout << "After heapsort: ";
+    list.println();
+}
 
  
  

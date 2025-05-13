@@ -80,7 +80,7 @@ struct InventoryAttribute
     }
     friend ostream& operator<<(ostream& os, const InventoryAttribute& attr);
 };
-ostream& operator<<(ostream& os, const InventoryAttribute& attr) {
+inline ostream& operator<<(ostream& os, const InventoryAttribute& attr) {
     os << attr.toString();
     return os;
 }
@@ -267,7 +267,7 @@ List2D<T>::List2D(const List2D<T> &other)
 template <typename T>
 List2D<T>::~List2D()
 {
-	while(pMatrix->empty()){
+	while(!pMatrix->empty()){
 		delete pMatrix->removeAt(0);
 	}
 	delete pMatrix;
@@ -285,8 +285,9 @@ void List2D<T>::setRow(int rowIndex, const List1D<T> &row)
 	if(rowIndex < 0 || rowIndex >= pMatrix->size()){
 		throw std::out_of_range("Index is out of range!");
 	}
-	DLinkedList<DLinkedList<T>*> * tmp = new DLinkedList<DLinkedList<T>*>(); 
-	for(int i = 0; i < this->pList->size(); i++){
+	//DLinkedList<DLinkedList<T>*> * tmp = new DLinkedList<DLinkedList<T>*>(); 
+	IList<IList<T>*>* tmp = new DLinkedList<IList<T>*>();
+	for(int i = 0; i < this->pMatrix->size(); i++){
 		DLinkedList<T> * subtmp = new DLinkedList<T>(); 
 		if(i == rowIndex){
 			for(int j = 0; j< row.size(); j++){
@@ -312,6 +313,9 @@ void List2D<T>::removeAt(int index){
 template <typename T>
 void List2D<T>::addRow(const List1D<T> &row)
 {
+    	if (!pMatrix) throw runtime_error("pMatrix is null in addRow()");
+    	if (row.size() > 0 && row.get(0) == T()) cout << "row[0] looks default\n";
+
 	IList<T>* tmp = new DLinkedList<T>();
 	for(int i = 0; i < row.size(); i++){
 		tmp->add(row.get(i));
@@ -372,14 +376,14 @@ ostream &operator<<(ostream &os, const List2D<T> &matrix)
 }
 
 // -------------------- InventoryManager Method Definitions --------------------
-InventoryManager::InventoryManager()
+inline InventoryManager::InventoryManager()
 {
 	this->attributesMatrix = List2D<InventoryAttribute>();
 	this->productNames = List1D<string>();
 	this->quantities = List1D<int>();
 }
 
-InventoryManager::InventoryManager(const List2D<InventoryAttribute> &matrix,
+inline InventoryManager::InventoryManager(const List2D<InventoryAttribute> &matrix,
                                    const List1D<string> &names,
                                    const List1D<int> &quantities)
 	: attributesMatrix(matrix),  
@@ -387,19 +391,19 @@ InventoryManager::InventoryManager(const List2D<InventoryAttribute> &matrix,
 	  quantities(quantities) 
 {}
 
-InventoryManager::InventoryManager(const InventoryManager &other)
+inline InventoryManager::InventoryManager(const InventoryManager &other)
 {
 	this->attributesMatrix = List2D<InventoryAttribute>(other.getAttributesMatrix());
 	this->productNames = List1D<string>(other.getProductNames());
 	this->quantities = List1D<int>(other.getQuantities());
 }
 
-int InventoryManager::size() const
+inline int InventoryManager::size() const
 {
 	return this->productNames.size();
 }
 
-List1D<InventoryAttribute> InventoryManager::getProductAttributes(int index) const
+inline List1D<InventoryAttribute> InventoryManager::getProductAttributes(int index) const
 {
 	if(index < 0 || index >= this->attributesMatrix.rows()){
 		throw std::out_of_range("Index is invalid");
@@ -407,7 +411,7 @@ List1D<InventoryAttribute> InventoryManager::getProductAttributes(int index) con
 	return this->attributesMatrix.getRow(index);
 }
 
-string InventoryManager::getProductName(int index) const
+inline string InventoryManager::getProductName(int index) const
 {
 	if(index < 0 || index >= this->productNames.size()){
 		throw std::out_of_range("Index is out of range!");
@@ -415,7 +419,7 @@ string InventoryManager::getProductName(int index) const
 	return this->productNames.get(index);
 }
 
-int InventoryManager::getProductQuantity(int index) const
+inline int InventoryManager::getProductQuantity(int index) const
 {
 	if(index < 0 || index >= this->quantities.size()){
 		throw std::out_of_range("Index is out of range!");
@@ -423,7 +427,7 @@ int InventoryManager::getProductQuantity(int index) const
 	return this->quantities.get(index);
 }
 
-void InventoryManager::updateQuantity(int index, int newQuantity)
+inline void InventoryManager::updateQuantity(int index, int newQuantity)
 {
 	if(index < 0 || index >= this->size()){
 		throw std::out_of_range("Index is invalid");
@@ -431,21 +435,21 @@ void InventoryManager::updateQuantity(int index, int newQuantity)
 	this->quantities.set(index, newQuantity);
 }
 
-void InventoryManager::addProduct(const List1D<InventoryAttribute> &attributes, const string &name, int quantity)
+inline void InventoryManager::addProduct(const List1D<InventoryAttribute> &attributes, const string &name, int quantity)
 {
 	this->attributesMatrix.addRow(attributes);
 	this->productNames.add(name);
 	this->quantities.add(quantity);
 }
 
-void InventoryManager::removeProduct(int index)
+inline void InventoryManager::removeProduct(int index)
 {
 	this->attributesMatrix.removeAt(index);		
 	this->productNames.removeAt(index);
 	this->quantities.removeAt(index);
 }
 
-List1D<string> InventoryManager::query(string attributeName, const double &minValue,
+inline List1D<string> InventoryManager::query(string attributeName, const double &minValue,
                                        const double &maxValue, int minQuantity, bool ascending) const
 {
 	List1D<string> query_products;
@@ -500,7 +504,7 @@ List1D<string> InventoryManager::query(string attributeName, const double &minVa
 	return query_products;
 }
 
-void InventoryManager::removeDuplicates()
+inline void InventoryManager::removeDuplicates()
 {
 	for(int i = 0; i < this->size(); i++){
 		for(int j = i+1; j < this->size(); j++){
@@ -513,7 +517,7 @@ void InventoryManager::removeDuplicates()
 	}
 }
 
-InventoryManager InventoryManager::merge(const InventoryManager &inv1,
+inline InventoryManager InventoryManager::merge(const InventoryManager &inv1,
                                          const InventoryManager &inv2)
 {
 	InventoryManager invMerge;
@@ -531,12 +535,12 @@ InventoryManager InventoryManager::merge(const InventoryManager &inv1,
     	return invMerge;
 }
 
-int myCeil(double x) {
+inline int myCeil(double x) {
     int xi = (int)x;
     return (x == (double)xi) ? xi : xi + ((x > 0) ? 1 : 0);
 }
 
-void InventoryManager::split(InventoryManager &section1,
+inline void InventoryManager::split(InventoryManager &section1,
                              InventoryManager &section2,
                              double ratio) const
 {
@@ -549,22 +553,22 @@ void InventoryManager::split(InventoryManager &section1,
 	}
 }
 
-List2D<InventoryAttribute> InventoryManager::getAttributesMatrix() const
+inline List2D<InventoryAttribute> InventoryManager::getAttributesMatrix() const
 {
 	return this->attributesMatrix;
 }
 
-List1D<string> InventoryManager::getProductNames() const
+inline List1D<string> InventoryManager::getProductNames() const
 {
 	return this->productNames;
 }
 
-List1D<int> InventoryManager::getQuantities() const
+inline List1D<int> InventoryManager::getQuantities() const
 {
 	return this->quantities;
 }
 
-string InventoryManager::toString() const
+inline string InventoryManager::toString() const
 {
 	stringstream ss;
 	ss << "InventoryManager[\n";
@@ -581,4 +585,5 @@ string InventoryManager::toString() const
 }
 
 #endif /* INVENTORY_MANAGER_H */
+
 

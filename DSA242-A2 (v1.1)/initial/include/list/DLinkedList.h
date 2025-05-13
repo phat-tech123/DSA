@@ -1,5 +1,4 @@
-/*
- * File:   DLinkedList.h
+/* File:   DLinkedList.h
  */
 
 #ifndef DLINKEDLIST_H
@@ -344,7 +343,7 @@ DLinkedList<T>::DLinkedList(const DLinkedList<T> &list)
 	this->tail->prev = this->head;
 	this->count = 0;
 
-	DLinkedList<T>::Iterator it;
+	typename DLinkedList<T>::Iterator it;
 	for(it = list.begin(); it != list.end(); it++){
 		this->add(*it);
 	}
@@ -364,7 +363,7 @@ DLinkedList<T> &DLinkedList<T>::operator=(const DLinkedList<T> &list)
 		this->tail->prev = this->head;
 		this->count = 0;
 
-		DLinkedList<T>::Iterator it;
+		typename DLinkedList<T>::Iterator it;
 		for(it = list.begin(); it != list.end(); it++){
 			this->add(*it);
 		}
@@ -622,7 +621,7 @@ void DLinkedList<T>::copyFrom(const DLinkedList<T> &list)
      * Iterates through the source list and adds each element, preserving the order of the nodes.
      */
 	clear();
-	DLinkedList<T>::Iterator it = list;
+	typename DLinkedList<T>::Iterator it;
 	for(it = list.begin(); it != list.end(); it++){
 		this->add(*it);
 	}
@@ -643,4 +642,5 @@ void DLinkedList<T>::removeInternalData()
 }
 
 #endif /* DLINKEDLIST_H */
+
 

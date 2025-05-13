@@ -5,6 +5,7 @@
 #include <sstream>
 #include <iostream>
 
+
 #include <list/XArrayList.h>
 using namespace std;
 /*
@@ -87,7 +88,6 @@ private:
         else{
             if (a < b) return -1;
             else if(a > b) return 1;
-            //else retu21rn 0;
             else return 0;
         }
     }
@@ -101,6 +101,7 @@ private:
     void removeInternalData();
     void copyFrom(const Heap<T>& heap);
 
+public:
     void heapsort(XArrayList<T>& arrayList);
     
 //////////////////////////////////////////////////////////////////////
@@ -306,7 +307,16 @@ int Heap<T>::size(){
 
 template<class T>
 void Heap<T>::heapify(T array[], int size){
-    for(int idx=0; idx < size; idx++) push(array[idx]);
+    ensureCapacity(size);
+    for (int i = 0; i < size; i++) {
+        elements[i] = array[i];
+    }
+    count = size;
+
+    // Apply reheapDown from the last parent down to the root
+    for (int i = (count / 2) - 1; i >= 0; i--) {
+        reheapDown(i);
+    }
 }
 
 template<class T>
@@ -434,6 +444,20 @@ void Heap<T>::copyFrom(const Heap<T>& heap){
     //Copy items from heap:
     for(int idx=0; idx < heap.size(); idx++){
         this->elements[idx] = heap.elements[idx];
+    }
+}
+template<class T>
+void Heap<T>::heapsort(XArrayList<T>& arrayList) {
+    Heap<T> tempHeap;
+
+    for (int i = 0; i < arrayList.size(); ++i) {
+        tempHeap.push(arrayList.get(i));
+    }
+
+    for (int i = 0; i < arrayList.size(); ++i) {
+	    arrayList.removeAt(i);
+	    arrayList.add(i, tempHeap.pop()); 
+	    arrayList.println();
     }
 }
 

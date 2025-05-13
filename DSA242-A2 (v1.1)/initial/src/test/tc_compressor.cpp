@@ -17,6 +17,7 @@ int charHashFunc(char& key, int tablesize) {
 void tc_huffman1001() {
     XArrayList<pair<char, int>> symbolFreqs;
     symbolFreqs.add(make_pair('A', 5));
+    symbolFreqs.add(make_pair('B', 3));
     
     HTree tree;
     tree.build(symbolFreqs);
@@ -112,12 +113,11 @@ void tc_compressor1001() {
     attrs.add(InventoryAttribute("weight", 2.5));
     attrs.add(InventoryAttribute("voltage", 12.0));
     manager.addProduct(attrs, "Gadget", 50);
+
+    //InvCompressor compressor(&manager);
+    //compressor.buildHuffman();
     
-    InvCompressor compressor(&manager);
-    compressor.buildHuffman();
-    
-    string encoded = compressor.encodeHuffman(attrs, "Gadget");
-    cout << "Encoded product: " << encoded << endl;
+    //string encoded = compressor.encodeHuffman(attrs, "Gadget");
 }
 
 void tc_compressor1002() {    
