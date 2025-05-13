@@ -62,3 +62,7 @@ Ensure you have `g++` installed and configured for C++17:
 ```bash
 g++ -std=c++17 -I./include main.cpp -o inventory_app
 ./inventory_app
+```
+
+## NOTE
+You can refer the source code in branch Assignment_1 and Assignment_2
